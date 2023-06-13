@@ -1,8 +1,8 @@
 #!/bin/sh 
 
-if [ $# == 0 ]; then
+if [ $# != 2 ] && [ $# != 3 ]; then
   echo
-  echo "$0 <Bucket Name> [Start Time] [End Time]"
+  echo "$0 <Bucket Name> <Start Time> [End Time]"
   echo
   echo "  Bucket Name: name of R2 bucket"
   echo "  Start Time: Start Time for query (i.e. 2023-05-04T16:00:00Z)"
@@ -13,7 +13,7 @@ fi
 
 BUCKET_NAME=$1
 START_TIME="2023-01-01T00:00:00Z"
-END_TIME=`date "+%Y-%m-%dT%H:%M:%SZ"`
+END_TIME=`date -u "+%Y-%m-%dT%H:%M:%SZ"`
 
 if [ -n "$2" ]; then
   START_TIME=$2
