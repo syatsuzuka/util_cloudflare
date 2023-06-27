@@ -1,29 +1,40 @@
-if ($args.Length -ne 3)
+if ($args.Length -ne 2)
 {
-  Write-Host "get_response_time.ps1  <URL>  <Interval>  <Output>"
+  Write-Host "get_response_time.ps1  <URL>  <Interval>"
   Write-Host
   Write-Host  "  URL: URL"
   Write-Host  "  Interval: interval to check the response time [sec]"
-  Write-Host  "  Output: output file name" 
 
   exit
 }
 
 $url = $Args[0]
 $interval = $Args[1]
-$output = $Args[2]
+$out = "response_time.txt"
+$err_out = "response_error.txt"
 
 Write-Output "url = $url"
-Write-Output "url = $url" > $output
+Write-Output "url = $url" >> $out
+Write-Output "url = $url" >> $err_out
 Write-Output ""
-Write-Output "" >> $output
+Write-Output "" >> $out
+Write-Output "" >> $err_out
 
 while ( 1 ){
   $date = date
-  $restime = (Measure-Command -Expression { $site = Invoke-WebRequest -Uri $url -UseBasicParsing }).Milliseconds
+  $restime = ""
 
-  Write-Output "$date`t$restime"
-  Write-Output "$date`t$restime" >> $output
+  try{
+    $restime = (Measure-Command -Expression { $site = Invoke-WebRequest -Uri $url -UseBasicParsing 2>> $err_out }).Milliseconds
+    $ret = $site.StatusCode.ToString()
+
+    Write-Output "$date`t$restime`t$ret"
+    Write-Output "$date`t$restime`t$ret" >> $out
+
+  } catch {
+    Write-Output "$date`terror`t$ret"
+    Write-Output "$date`terror`t$ret" >> $err_out
+  }
 
   Start-Sleep $interval
 }
