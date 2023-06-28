@@ -23,6 +23,7 @@ Write-Output "" >> $err_out
 while ( 1 ){
   $date = date
   $restime = ""
+  $ret = -1
 
   try{
     $restime = (Measure-Command -Expression { $site = Invoke-WebRequest -Uri $url -UseBasicParsing 2>> $err_out }).Milliseconds
