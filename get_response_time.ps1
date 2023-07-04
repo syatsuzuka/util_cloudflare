@@ -26,7 +26,7 @@ while ( 1 ){
   $ret = -1
 
   try{
-    $restime = (Measure-Command -Expression { $site = Invoke-WebRequest -Uri $url -UseBasicParsing 2>> $err_out }).Milliseconds
+    $restime = (Measure-Command -Expression { $site = Invoke-WebRequest -Uri $url -UseBasicParsing 2>> $err_out }).TotalMilliseconds
     $ret = $site.StatusCode.ToString()
 
     Write-Output "$date`t$restime`t$ret"
