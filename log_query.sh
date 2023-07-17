@@ -25,10 +25,10 @@ fi
 
 #======= Ouptut Param =======
 
-echo
-echo "BUCKET_NAME = ${BUCKET_NAME}"
-echo "START_TIME = ${START_TIME}"
-echo "END_TIME = ${END_TIME}"
+echo 1>&2
+echo "BUCKET_NAME = ${BUCKET_NAME}" 1>&2
+echo "START_TIME = ${START_TIME}" 1>&2
+echo "END_TIME = ${END_TIME}" 1>&2
 
 #======= Run Command =======
 
@@ -38,7 +38,7 @@ COMMAND="curl -s -g -X GET  \"https://api.cloudflare.com/client/v4/accounts/${CF
 -H \"R2-Access-Key-Id: ${R2_ACCESS_KEY_ID}\" \
 -H \"R2-Secret-Access-Key: ${R2_SECRET_ACCESS_KEY}\" | jq ."
 
-echo "COMMAND = $COMMAND"
+echo "COMMAND = $COMMAND" 1>&2
 
-echo
+echo 1>&2
 eval ${COMMAND}
