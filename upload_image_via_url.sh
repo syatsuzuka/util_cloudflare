@@ -46,7 +46,8 @@ echo
 echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE}
 
 
-for ((i=0; i<${NUM}; i++))
+#for ((i=0; i<${NUM}; i++))
+for i in `seq 1 ${NUM}`
 do
 
   COUNT=$(($i+1))
