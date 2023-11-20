@@ -1,5 +1,14 @@
 #!/bin/sh
 
+#=======================================================================================
+# File Name: upload_image_via_url.sh
+# Description: Do testing repeatedly about how long image upload via URL takes
+# Requirement:
+# - Platform: Mac, Linux
+# - Environment Variables: CF_ACCOUNT_ID, CF_AUTH_TOKEN
+# - Command: curl, perl, jq
+#=======================================================================================
+
 if [ $# != 2 ] && [ $# != 3 ]; then
   echo
   echo "$0 <Image Path> <Repeat Number> [Delete Option]"
@@ -46,11 +55,9 @@ echo
 echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE}
 
 
-#for ((i=0; i<${NUM}; i++))
-for i in `seq 1 ${NUM}`
+for COUNT in `seq 1 ${NUM}`
 do
 
-  COUNT=$(($i+1))
   echo "COUNT = $COUNT" | tee -a ${LOGFILE}
 
   #======= Upload Image =======

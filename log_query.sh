@@ -1,5 +1,15 @@
 #!/bin/sh 
 
+#=======================================================================================
+# File Name: log_query.sh
+# Description: Query logs from R2
+# Requirement:
+# - Platform: Mac, Linux
+# - Environment Variables: CF_EMAIL, CF_APIKEY, CF_ACCOUNT_ID, CF_AUTH_TOKEN
+#     R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
+# - Command: curl
+#=======================================================================================
+
 if [ $# != 3 ] && [ $# != 4 ]; then
   echo
   echo "$0 <Bucket Name> <Prefix> <Start Time> [End Time]"

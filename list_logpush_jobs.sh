@@ -1,5 +1,14 @@
 #!/bin/sh
 
+#=======================================================================================
+# File Name: list_logpush_jobs.sh
+# Description: Listup registered logpush jobs
+# Requirement:
+# - Platform: Mac, Linux
+# - Environment Variables: CF_EMAIL, CF_APIKEY, CF_ACCOUNT_ID
+# - Command: curl
+#=======================================================================================
+
 if [ $# != 0 ]; then
   echo
   echo "$0"

@@ -1,5 +1,14 @@
 #!/bin/sh
 
+#=======================================================================================
+# File Name: list_logpush_dataset_fields.sh
+# Description: Listup dataset field
+# Requirement:
+# - Platform: Mac, Linux
+# - Environment Variables: CF_EMAIL, CF_APIKEY, CF_ACCOUNT_ID
+# - Command: curl
+#=======================================================================================
+
 if [ $# != 1 ]; then
   echo
   echo "$0 <Dataset Name>"

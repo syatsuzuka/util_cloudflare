@@ -1,5 +1,15 @@
 #!/bin/sh
 
+#=======================================================================================
+# File Name: add_logpush_job.sh
+# Description: Add an account level logpush job for R2
+# Requirement:
+# - Platform: Mac, Linux
+# - Environment Variables: CF_EMAIL, CF_APIKEY, CF_ACCOUNT_ID, CF_AUTH_TOKEN
+#     R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
+# - Command: curl
+#=======================================================================================
+
 if [ $# != 3 ]; then
   echo
   echo "$0 <Dataset Name> <Bucket Name> <Job Name>"
