@@ -41,8 +41,6 @@ if [ $# = 3 ]; then
   fi
 fi
 
-TOTAL=0
-
 echo "URL = ${URL}" | tee -a ${LOGFILE}
 echo "NUM = ${NUM}" | tee -a ${LOGFILE}
 echo "DELETE = ${DELETE}" | tee -a ${LOGFILE}
@@ -81,14 +79,13 @@ do
 
   echo "COMMAND = $COMMAND" | tee -a ${LOGFILE}
 
-  STIME=$(perl -MTime::HiRes -e 'printf("%.0f\n",Time::HiRes::time()*1000)' )
   SDATETIME=$( date "+%Y/%m/%d %H:%M:%S" )
+  STIME=$(perl -MTime::HiRes -e 'printf("%.0f\n",Time::HiRes::time()*1000)' )
 
   RESPONSE=$(eval ${COMMAND} 2> /dev/null)
 
   ETIME=$(perl -MTime::HiRes -e 'printf("%.0f\n",Time::HiRes::time()*1000)' )
   ELAPSE=$((${ETIME}-${STIME}))
-  TOTAL=$((${TOTAL}+${ELAPSE}))
   SUCCESS=$(echo $RESPONSE | jq '.success')
 
   if [ ${SUCCESS} = "true" ]; then
