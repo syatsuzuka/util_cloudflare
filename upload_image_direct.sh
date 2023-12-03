@@ -1,35 +1,33 @@
 #!/bin/sh
 
 #=======================================================================================
-# File Name: upload_image_via_url.sh
-# Description: Do testing repeatedly about how long image upload via URL takes
+# File Name: upload_image_direct.sh
+# Description: Do testing repeatedly about how long direct_upload API takes
 # Requirement:
 # - Platform: Mac, Linux
 # - Environment Variables: CF_ACCOUNT_ID, CF_AUTH_TOKEN
 # - Command: curl, perl, jq
 #=======================================================================================
 
-if [ $# != 2 ] && [ $# != 3 ]; then
+if [ $# != 1 ] && [ $# != 2 ]; then
   echo
-  echo "$0 <Image Path> <Repeat Number> [Delete Option]"
+  echo "$0 <Repeat Number> [Delete Option]"
   echo
-  echo "  Image Path (URL): URL of the input image"
   echo "  Repeat Number: The number to repeat file upload"
   echo "  Delete Option: Put 'N' if you want to keep the uploaded files (default is 'Y')"
   echo
   exit 1
 fi
 
-URL=$1
-NUM=$2
+NUM=$1
 DATETIME=$( date "+%Y%m%d%H%M%S" )
-OUTPUTFILE="indirect_${DATETIME}.txt"
-LOGFILE="indirect_${DATETIME}.log"
+OUTPUTFILE="direct_${DATETIME}.txt"
+LOGFILE="direct_${DATETIME}.log"
 REPORTLOG
 DELETE="Y"
 
-if [ $# = 3 ]; then
-  if [ $3 != "Y" ] && [ $3 != "N" ]; then
+if [ $# = 2 ]; then
+  if [ $2 != "Y" ] && [ $2 != "N" ]; then
     echo
     echo "$0 <Image Path> <Repeat Number> <Result File Name> [Delete Option]"
     echo
@@ -37,7 +35,7 @@ if [ $# = 3 ]; then
     echo
     exit 1
   else
-    DELETE=$3
+    DELETE=$2
   fi
 fi
 
@@ -73,11 +71,10 @@ do
   echo
 
   COMMAND="curl --request POST \
-  --url https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1 \
+  --url https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v2/direct_upload \
   --header 'Authorization: Bearer ${CF_AUTH_TOKEN}' \
-  --form 'url=${URL}' \
-  --form 'metadata={\"key\":\"value\"}' \
-  --form 'requireSignedURLs=false'"
+  --form 'requireSignedURLs=true' \
+  --form 'metadata={\"key\":\"value\"}'"
 
   echo "COMMAND = $COMMAND" | tee -a ${LOGFILE}
 
