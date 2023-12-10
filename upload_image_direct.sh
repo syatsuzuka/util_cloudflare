@@ -9,27 +9,40 @@
 # - Command: curl, perl, jq
 #=======================================================================================
 
-if [ $# != 1 ] && [ $# != 2 ]; then
+if [ $# != 2 ] && [ $# != 3 ]; then
   echo
-  echo "$0 <Repeat Number> [Delete Option]"
+  echo "$0 <Repeat Number> <Interval> [Delete Option]"
   echo
   echo "  Repeat Number: The number to repeat file upload"
+  echo "  Interval: Seconds for each interval in the loop"
   echo "  Delete Option: Put 'N' if you want to keep the uploaded files (default is 'Y')"
   echo
   exit 1
 fi
 
 NUM=$1
+INTERVAL=$2
 DATETIME=$( date "+%Y%m%d%H%M%S" )
 OUTPUTFILE="direct_${DATETIME}.txt"
 LOGFILE="direct_${DATETIME}.log"
 REPORTLOG
 DELETE="Y"
 
-if [ $# = 2 ]; then
-  if [ $2 != "Y" ] && [ $2 != "N" ]; then
+if [ $NUM = 0 ]; then
+  if [ $INTERVAL -lt 60 ]; then
     echo
-    echo "$0 <Image Path> <Repeat Number> <Result File Name> [Delete Option]"
+    echo "$0 <Repeat Number> <Interval> [Delete Option]"
+    echo
+    echo "  Interval needs to be more than 10 seconds for infinite loop (NUM = 0)"
+    echo
+    exit 1
+  fi
+fi
+
+if [ $# = 3 ]; then
+  if [ $3 != "Y" ] && [ $3 != "N" ]; then
+    echo
+    echo "$0 <Image Path> <Repeat Number> <Interval> [Delete Option]"
     echo
     echo "  Delete Option needs to be 'Y' or 'N'"
     echo
@@ -52,8 +65,9 @@ echo
 
 echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE}
 
+COUNT=1
 
-for COUNT in `seq 1 ${NUM}`
+while :
 do
 
   echo "COUNT = $COUNT" | tee -a ${LOGFILE}
@@ -101,7 +115,11 @@ do
   echo "ELAPSE = $ELAPSE"
   echo
 
-  echo "${SDATETIME}, ${COUNT} / ${NUM}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+  if [ $NUM -ne 0 ]; then
+    echo "${SDATETIME}, ${COUNT}/${NUM}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+  else
+    echo "${SDATETIME}, ${COUNT}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+  fi
 
 
   #======= Delete Image =======
@@ -124,4 +142,15 @@ do
 
     echo "RESPONSE = $RESPONSE" | tee -a ${LOGFILE}
   fi
+
+  #======= Break from the loop =======
+  COUNT=`expr $COUNT + 1`
+
+  if [ $NUM -ne 0 ]; then
+    if [ $NUM -lt $COUNT ]; then
+      break
+    fi
+  fi
+
+  sleep $INTERVAL
 done

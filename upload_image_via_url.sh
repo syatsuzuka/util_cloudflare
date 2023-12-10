@@ -9,12 +9,13 @@
 # - Command: curl, perl, jq
 #=======================================================================================
 
-if [ $# != 2 ] && [ $# != 3 ]; then
+if [ $# != 3 ] && [ $# != 4 ]; then
   echo
-  echo "$0 <Image Path> <Repeat Number> [Delete Option]"
+  echo "$0 <Image Path> <Repeat Number> <Interval> [Delete Option]"
   echo
   echo "  Image Path (URL): URL of the input image"
-  echo "  Repeat Number: The number to repeat file upload"
+  echo "  Repeat Number: The number to repeat file upload (0: infinite loop)"
+  echo "  Interval: Seconds for each interval in the loop"
   echo "  Delete Option: Put 'N' if you want to keep the uploaded files (default is 'Y')"
   echo
   exit 1
@@ -22,22 +23,34 @@ fi
 
 URL=$1
 NUM=$2
+INTERVAL=$3
 DATETIME=$( date "+%Y%m%d%H%M%S" )
 OUTPUTFILE="indirect_${DATETIME}.txt"
 LOGFILE="indirect_${DATETIME}.log"
 REPORTLOG
 DELETE="Y"
 
-if [ $# = 3 ]; then
-  if [ $3 != "Y" ] && [ $3 != "N" ]; then
+if [ $NUM = 0 ]; then
+  if [ $INTERVAL -lt 60 ]; then
     echo
-    echo "$0 <Image Path> <Repeat Number> <Result File Name> [Delete Option]"
+    echo "$0 <Image Path> <Repeat Number> <Interval> [Delete Option]"
+    echo
+    echo "  Interval needs to be more than 10 seconds for infinite loop (NUM = 0)"
+    echo
+    exit 1
+  fi
+fi
+
+if [ $# = 4 ]; then
+  if [ $4 != "Y" ] && [ $4 != "N" ]; then
+    echo
+    echo "$0 <Image Path> <Repeat Number> <Interval> [Delete Option]"
     echo
     echo "  Delete Option needs to be 'Y' or 'N'"
     echo
     exit 1
   else
-    DELETE=$3
+    DELETE=$4
   fi
 fi
 
@@ -54,8 +67,9 @@ echo
 
 echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE}
 
+COUNT=1
 
-for COUNT in `seq 1 ${NUM}`
+while :
 do
 
   echo "COUNT = $COUNT" | tee -a ${LOGFILE}
@@ -104,7 +118,11 @@ do
   echo "ELAPSE = $ELAPSE"
   echo
 
-  echo "${SDATETIME}, ${COUNT} / ${NUM}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+  if [ $NUM -ne 0 ]; then
+    echo "${SDATETIME}, ${COUNT}/${NUM}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+  else
+    echo "${SDATETIME}, ${COUNT}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+  fi
 
 
   #======= Delete Image =======
@@ -127,4 +145,16 @@ do
 
     echo "RESPONSE = $RESPONSE" | tee -a ${LOGFILE}
   fi
+
+
+  #======= Break from the loop =======
+  COUNT=`expr $COUNT + 1`
+
+  if [ $NUM -ne 0 ]; then
+    if [ $NUM -lt $COUNT ]; then
+      break
+    fi
+  fi
+
+  sleep $INTERVAL
 done
