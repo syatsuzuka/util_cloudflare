@@ -19,6 +19,8 @@ Write-Output "url = $url" >> $err_out
 Write-Output ""
 Write-Output "" >> $out
 Write-Output "" >> $err_out
+Write-Output "Date Time`tResponse Time`tStatus"
+Write-Output "Date Time`tResponse Time`tStatus" >> $out
 
 while ( 1 ){
   $date = date
