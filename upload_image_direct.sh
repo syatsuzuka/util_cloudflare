@@ -26,7 +26,8 @@ FILEPATH=$1
 NUM=$2
 INTERVAL=$3
 DATETIME=$( date "+%Y%m%d%H%M%S" )
-OUTPUTFILE="direct_${DATETIME}.txt"
+OUTPUTFILE_1="direct_${DATETIME}_1.txt"
+OUTPUTFILE_2="direct_${DATETIME}_2.txt"
 LOGFILE="direct_${DATETIME}.log"
 DELETE="Y"
 
@@ -76,13 +77,15 @@ echo "NUM = ${NUM}" | tee -a ${LOGFILE}
 echo "INTERVAL = ${INTERVAL}" | tee -a ${LOGFILE}
 echo "BATCH = ${BATCH}" | tee -a ${LOGFILE}
 echo "DELETE = ${DELETE}" | tee -a ${LOGFILE}
-echo "OUTPUTFILE = ${OUTPUTFILE}"
+echo "OUTPUTFILE_1 = ${OUTPUTFILE_1}"
+echo "OUTPUTFILE_2 = ${OUTPUTFILE_2}"
 echo "LOGIFLE = ${LOGFILE}"
 echo
 
 #======= Output Result (Header) =======
 
-echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE}
+echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE_1}
+echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE_2}
 
 COUNT=1
 
@@ -167,13 +170,21 @@ do
   echo
 
   if [ $NUM -ne 0 ]; then
-    echo "${SDATETIME}, ${COUNT}/${NUM}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+    echo "${SDATETIME}, ${COUNT}/${NUM}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE_1}
   else
-    echo "${SDATETIME}, ${COUNT}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE}
+    echo "${SDATETIME}, ${COUNT}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE_1}
   fi
 
 
   #======= Upload Image =======
+
+  STIME="-"
+  SDATETIME="-"
+  RESPONSE="-"
+  SUCCESS="-"
+  RESULT="-"
+  ETIME="-"
+  ELAPSE="-"
 
   COMMAND="curl --request POST \
     --url ${UPLOAD_URL} \
@@ -181,16 +192,33 @@ do
 
   echo "COMMAND = $COMMAND" | tee -a ${LOGFILE}
 
+  STIME=$(perl -MTime::HiRes -e 'printf("%.0f\n",Time::HiRes::time()*1000)' )
+  SDATETIME=$( date "+%Y/%m/%d %H:%M:%S" )
+
   RESPONSE=$(eval ${COMMAND} 2> /dev/null)
 
-  echo "RESPONSE = $RESPONSE"
-
+  ETIME=$(perl -MTime::HiRes -e 'printf("%.0f\n",Time::HiRes::time()*1000)' )
+  ELAPSE=$((${ETIME}-${STIME}))
+  TOTAL=$((${TOTAL}+${ELAPSE}))
   SUCCESS=$(echo $RESPONSE | jq '.success')
 
   if [ ${SUCCESS} = "true" ]; then
     RESULT="SUCCESS";
   else
     RESULT="ERROR";
+  fi
+
+  echo "RESPONSE = $RESPONSE" | tee -a ${LOGFILE}
+  echo "SDATETIME = $SDATETIME" | tee -a ${LOGFILE}
+  echo "STIME = $STIME"
+  echo "ETIME = $ETIME"
+  echo "ELAPSE = $ELAPSE"
+  echo
+
+  if [ $NUM -ne 0 ]; then
+    echo "${SDATETIME}, ${COUNT}/${NUM}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE_2}
+  else
+    echo "${SDATETIME}, ${COUNT}, ${ELAPSE}, ${RESULT}" >> ${OUTPUTFILE_2}
   fi
 
 
