@@ -47,7 +47,7 @@ elif [ $4 = "general" ]; then
   BATCH="N"
 else
   echo
-  echo "$0 <Image Path> <Repeat Number> <Mode> [Delete Option]"
+  echo "$0 <Image Path> <Repeat Number> <Interval> <Mode> [Delete Option]"
   echo
   echo "  Mode needs to be 'batch' or 'general'"
   echo
@@ -86,8 +86,6 @@ echo
 echo "Date Time, Count, Elapsed Time, Result" > ${OUTPUTFILE}
 
 COUNT=1
-TOKEN_EXPIRE=0
-
 
 while :
 do
@@ -129,7 +127,9 @@ do
     COMMAND="curl --request POST \
       --url https://batch.imagedelivery.net/images/v1 \
       --header 'Authorization: Bearer ${BATCH_TOKEN}' \
-      --form 'url=${URL}'"
+      --form 'url=${URL}' \
+      --form 'metadata={\"key\":\"value\"}' \
+      --form 'requireSignedURLs=false'"
   else
     COMMAND="curl --request POST \
       --url https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1 \
