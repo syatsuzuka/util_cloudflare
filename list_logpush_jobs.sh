@@ -5,7 +5,7 @@
 # Description: Listup registered logpush jobs
 # Requirement:
 # - Platform: Mac, Linux
-# - Environment Variables: CF_EMAIL, CF_APIKEY, CF_ACCOUNT_ID
+# - Environment Variables: CLOUDFLARE_EMAIL, CLOUDFLARE_APIKEY, CLOUDFLARE_ACCOUNT_ID
 # - Command: curl
 #=======================================================================================
 
@@ -18,9 +18,9 @@ fi
 
 #======= Parameter Set =======
 
-EMAIL=${CF_EMAIL}
-APIKEY=${CF_APIKEY}
-ACCOUNT_ID=${CF_ACCOUNT_ID}
+EMAIL=${CLOUDFLARE_EMAIL}
+APIKEY=${CLOUDFLARE_APIKEY}
+ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
 API_TYPE='accounts'
 
 echo

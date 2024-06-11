@@ -5,7 +5,7 @@
 # Description: Do testing repeatedly about how long direct_upload API takes
 # Requirement:
 # - Platform: Mac, Linux
-# - Environment Variables: CF_ACCOUNT_ID, CF_AUTH_TOKEN
+# - Environment Variables: CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_AUTH_TOKEN
 # - Command: curl, perl, jq
 #=======================================================================================
 
@@ -187,8 +187,15 @@ do
   ELAPSE="-"
 
   COMMAND="curl --request POST \
+<<<<<<< HEAD
+  --url https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/images/v2/direct_upload \
+  --header 'Authorization: Bearer ${CLOUDFLARE_AUTH_TOKEN}' \
+  --form 'requireSignedURLs=true' \
+  --form 'metadata={\"key\":\"value\"}'"
+=======
     --url ${UPLOAD_URL} \
     --form 'file=@${FILEPATH}'"
+>>>>>>> 6eeb1182ddcbe1e95782d38b95513c78ca6c4a27
 
   echo "COMMAND = $COMMAND" | tee -a ${LOGFILE}
 
@@ -232,8 +239,8 @@ do
   if [ ${DELETE} = "Y" ]; then
 
     COMMAND="curl --request DELETE \
-    --url https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1/${IMAGE_ID} \
-    --header 'Authorization: Bearer ${CF_AUTH_TOKEN}' \
+    --url https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/images/v1/${IMAGE_ID} \
+    --header 'Authorization: Bearer ${CLOUDFLARE_AUTH_TOKEN}' \
     --header 'Content-Type: appklication/json'"
 
     echo "COMMAND = $COMMAND" | tee -a ${LOGFILE}
@@ -242,6 +249,8 @@ do
 
     echo "RESPONSE = $RESPONSE" | tee -a ${LOGFILE}
   fi
+<<<<<<< HEAD
+=======
 
   #======= Break from the loop =======
   COUNT=`expr $COUNT + 1`
@@ -253,4 +262,5 @@ do
   fi
 
   sleep $INTERVAL
+>>>>>>> 6eeb1182ddcbe1e95782d38b95513c78ca6c4a27
 done

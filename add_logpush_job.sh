@@ -5,7 +5,7 @@
 # Description: Add an account level logpush job for R2
 # Requirement:
 # - Platform: Mac, Linux
-# - Environment Variables: CF_EMAIL, CF_APIKEY, CF_ACCOUNT_ID, CF_AUTH_TOKEN
+# - Environment Variables: CLOUDFLARE_EMAIL, CLOUDFLARE_APIKEY, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_AUTH_TOKEN
 #     R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
 # - Command: curl
 #=======================================================================================
@@ -27,9 +27,9 @@ DATASET=$1
 BUCKET_NAME=$2
 LP_NAME=$3
 
-EMAIL=${CF_EMAIL}
-APIKEY=${CF_APIKEY}
-ACCOUNT_ID=${CF_ACCOUNT_ID}
+EMAIL=${CLOUDFLARE_EMAIL}
+APIKEY=${CLOUDFLARE_APIKEY}
+ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
 API_TYPE='accounts'
 DEST_BUCK="r2://${BUCKET_NAME}/{DATE}?account-id=${ACCOUNT_ID}&access-key-id=${R2_ACCESS_KEY_ID}&secret-access-key=${R2_SECRET_ACCESS_KEY}"
 OWNER_CHALL=''

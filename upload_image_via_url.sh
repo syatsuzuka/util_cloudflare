@@ -5,7 +5,7 @@
 # Description: Do testing repeatedly about how long image upload via URL takes
 # Requirement:
 # - Platform: Mac, Linux
-# - Environment Variables: CF_ACCOUNT_ID, CF_AUTH_TOKEN
+# - Environment Variables: CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_AUTH_TOKEN
 # - Command: curl, perl, jq
 #=======================================================================================
 
@@ -123,6 +123,14 @@ do
 
   echo
 
+<<<<<<< HEAD
+  COMMAND="curl --request POST \
+  --url https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/images/v1 \
+  --header 'Authorization: Bearer ${CLOUDFLARE_AUTH_TOKEN}' \
+  --form 'url=${URL}' \
+  --form 'metadata={\"key\":\"value\"}' \
+  --form 'requireSignedURLs=false'"
+=======
   if [ $BATCH = "Y" ]; then
     COMMAND="curl --request POST \
       --url https://batch.imagedelivery.net/images/v1 \
@@ -138,6 +146,7 @@ do
       --form 'metadata={\"key\":\"value\"}' \
       --form 'requireSignedURLs=false'"
   fi
+>>>>>>> 6eeb1182ddcbe1e95782d38b95513c78ca6c4a27
 
   echo "COMMAND = $COMMAND" | tee -a ${LOGFILE}
 
@@ -181,8 +190,8 @@ do
   if [ ${DELETE} = "Y" ]; then
 
     COMMAND="curl --request DELETE \
-    --url https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1/${IMAGE_ID} \
-    --header 'Authorization: Bearer ${CF_AUTH_TOKEN}' \
+    --url https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/images/v1/${IMAGE_ID} \
+    --header 'Authorization: Bearer ${CLOUDFLARE_AUTH_TOKEN}' \
     --header 'Content-Type: appklication/json'"
 
     echo "COMMAND = $COMMAND" | tee -a ${LOGFILE}
@@ -191,6 +200,8 @@ do
 
     echo "RESPONSE = $RESPONSE" | tee -a ${LOGFILE}
   fi
+<<<<<<< HEAD
+=======
 
 
   #======= Break from the loop =======
@@ -203,4 +214,5 @@ do
   fi
 
   sleep $INTERVAL
+>>>>>>> 6eeb1182ddcbe1e95782d38b95513c78ca6c4a27
 done

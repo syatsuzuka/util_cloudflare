@@ -5,7 +5,7 @@
 # Description: Query logs from R2
 # Requirement:
 # - Platform: Mac, Linux
-# - Environment Variables: CF_EMAIL, CF_APIKEY, CF_ACCOUNT_ID, CF_AUTH_TOKEN
+# - Environment Variables: CLOUDFLARE_EMAIL, CLOUDFLARE_APIKEY, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_AUTH_TOKEN
 #     R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
 # - Command: curl
 #=======================================================================================
@@ -45,9 +45,9 @@ echo "END_TIME = ${END_TIME}" 1>&2
 
 #======= Run Command =======
 
-COMMAND="curl -s -g -X GET  \"https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/logs/retrieve?start=${START_TIME}&end=${END_TIME}&bucket=${BUCKET_NAME}&prefix=${PREFIX}\" \
--H \"X-Auth-Email: ${CF_EMAIL}\" \
--H \"X-Auth-Key: ${CF_APIKEY}\" \
+COMMAND="curl -s -g -X GET  \"https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/logs/retrieve?start=${START_TIME}&end=${END_TIME}&bucket=${BUCKET_NAME}&prefix=${PREFIX}\" \
+-H \"X-Auth-Email: ${CLOUDFLARE_EMAIL}\" \
+-H \"X-Auth-Key: ${CLOUDFLARE_APIKEY}\" \
 -H \"R2-Access-Key-Id: ${R2_ACCESS_KEY_ID}\" \
 -H \"R2-Secret-Access-Key: ${R2_SECRET_ACCESS_KEY}\" | jq ."
 
