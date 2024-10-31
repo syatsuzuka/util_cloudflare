@@ -15,7 +15,7 @@ if [ $# != 3 ] && [ $# != 4 ]; then
   echo "$0 <Bucket Name> <Prefix> <Start Time> [End Time]"
   echo
   echo "  Bucket Name: name of R2 bucket"
-  echo "  Prefix: prefix in R2 bucket"
+  echo "  Prefix: prefix in R2 bucket (i.e. {DATE})"
   echo "  Start Time: Start Time for query (i.e. 2023-05-04T16:00:00Z)"
   echo "  End Time: End Time for query. Default time is now (i.e. 2023-05-06T16:00:00Z)"
   echo
