@@ -16,6 +16,9 @@ if [ $# != 1 ] && [ $# != 2 ]; then
   echo "  Since: from date (i.e. 20230901)"
   echo "  Limit:  number of limit in fetch (default: 0 - no limit)"
   echo
+  echo "if you want to convert from json to csv"
+  echo "get_quarantined_mails.sh <Since> | jq -r '.data[]|[.subject, .from, .to[], .detection_reasons[],.is_quarantined]|@csv'"
+  echo
   exit 1
 fi
 
