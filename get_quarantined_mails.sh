@@ -28,8 +28,8 @@ fi
 
 #======= Output Param =======
 
-echo "SINCE = ${SINCE}"
-echo "LIMIT = ${LIMIT}"
+echo "SINCE = ${SINCE}" 1>&2
+echo "LIMIT = ${LIMIT}" 1>&2
 
 COMMAND="curl -u ${CLOUDFLARE_AREA1_PUBKEY}:${CLOUDFLARE_AREA1_PRIKEY} https://api.area1security.com/quarantined-messages?since=${SINCE}"
 
@@ -39,6 +39,6 @@ fi
 
 COMMAND="${COMMAND} | jq ."
 
-echo ${COMMAND}
+echo ${COMMAND} 1>&2
 eval ${COMMAND}
 
